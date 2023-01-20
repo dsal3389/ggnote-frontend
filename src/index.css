@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 0, 230, 77;
+    --color-bg-primary: 250, 250, 250;
+    --color-bg-accent: 247, 247, 247;
+    --color-border: 219, 219, 219;
+    --color-text: 35, 35, 35;
+  }
+
+  .dark {
+    --primary: 8, 185, 67;
+    --color-bg-primary: 15, 15, 15;
+    --color-bg-accent: 26, 26, 26;
+    --color-border: 43, 43, 43;
+    --color-text: 240, 240, 240;
+  }
+}
+
+body {
+  background-color: rgb(var(--color-bg-primary));
+  transition-duration: 250ms;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-bg-accent));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-text));
+}
+
+.markdown-block > pre {
+  background-color: black;
+  border: 1px solid gray;
+  color: white;
+  padding: 8px;
+}
