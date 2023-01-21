@@ -5,32 +5,19 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import BtnComponent from "../components/buttons/btn.component";
 import InputComponent from "../components/input/input.component";
 import TextInputComponent from "../components/input/text.input.component";
+import { createNoteApi } from "../api/notes";
 
 async function postNote({ queryKey }) {
   const [_, note] = queryKey;
-  const results = await fetch(`${import.meta.env.VITE_BACKEND_DOMAIN}/post`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(note),
-  });
-
-  if (results.status != 201)
-    throw Error(`unexpected status code ${results.status}`);
-  return await results.json();
+  return await createNoteApi(note);
 }
 
 export default function CreateNote() {
   const [note, SetNote] = useState({ title: "", content: "# hello world" });
-  const { data, isLoading, refetch } = useQuery(
-    ["createNote", note],
-    postNote,
-    {
-      enabled: false,
-      retry: false,
-    }
-  );
+  const { isLoading, refetch } = useQuery(["createNote", note], postNote, {
+    enabled: false,
+    retry: false,
+  });
   const createNote = (e) => {
     e.preventDefault();
     refetch().then(({ data: { id } }) => redirect(`/${id}`));
@@ -46,7 +33,7 @@ export default function CreateNote() {
 
   return (
     <>
-      <div className="fixed left-0 right-0 w-full h-[56px] border-b p-3 flex items-center z-[100] bg-accent/50 backdrop-blur">
+      <div className="fixed left-0 right-0 w-full h-[56px] border-b p-4 flex items-center z-[100] bg-accent/50 backdrop-blur">
         <h2 className="text-lg font-bold">{note.title}</h2>
         <div className="flex-1"></div>
         <BtnComponent

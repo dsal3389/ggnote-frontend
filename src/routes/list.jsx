@@ -1,19 +1,16 @@
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 
+import { listNotesApi } from "../api/notes";
 import BtnComponent from "../components/buttons/btn.component";
 import NoteComponent from "../components/note.component";
 import SpinnerComponent from "../components/spinner";
 
 export default function ListNotes() {
-  const fetchNotes = ({ pageParam = { max: 30, offset: 0, total_count: 0 } }) =>
-    fetch(
-      `${import.meta.env.VITE_BACKEND_DOMAIN}/?max=${pageParam.max}&offset=${
-        pageParam.offset
-      }`
-    ).then((res) => res.json());
+  const listNoteswrapper = async ({ pageParam = { max: 30, offset: 0 } }) =>
+    await listNotesApi({ max: pageParam.max, offset: pageParam.offset });
   const { data, isLoading, isFetchingNextPage, fetchNextPage } =
-    useInfiniteQuery("notesList", fetchNotes, {
+    useInfiniteQuery("notesList", listNoteswrapper, {
       getNextPageParam: (lastpage) =>
         lastpage.total_count >= lastpage.offset
           ? { max: lastpage.max, offset: lastpage.offset + lastpage.max }
