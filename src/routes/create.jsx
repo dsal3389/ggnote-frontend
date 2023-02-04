@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import BtnComponent from "../components/buttons/btn.component";
 import InputComponent from "../components/input/input.component";
@@ -13,6 +13,7 @@ async function postNote({ queryKey }) {
 }
 
 export default function CreateNote() {
+  const navigate = useNavigate();
   const [note, SetNote] = useState({ title: "", content: "# hello world" });
   const { isLoading, refetch } = useQuery(["createNote", note], postNote, {
     enabled: false,
@@ -20,7 +21,7 @@ export default function CreateNote() {
   });
   const createNote = (e) => {
     e.preventDefault();
-    refetch().then(({ data: { id } }) => redirect(`/${id}`));
+    refetch().then(({ data: { id } }) => navigate(`/${id}`));
   };
   const handleInputText = (field) => {
     return (e) => {
